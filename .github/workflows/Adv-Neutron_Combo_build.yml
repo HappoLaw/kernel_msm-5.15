@@ -27,7 +27,7 @@ on:
         description: "Spoof kernel version (format: X.Y.Z)"
         required: false
         type: string
-        default: "6.6.127"
+        default: ""
       localVersion:
         description: "Custom localversion name (e.g., -mybuild)"
         required: false
@@ -175,18 +175,14 @@ jobs:
             # 1. Hardcode KERNELVERSION including the local suffix
             sed -i "s/^KERNELVERSION =.*/KERNELVERSION = $FULL_VERSION/" Makefile
             
-            # 2. Silence the setlocalversion script
-            echo "" > .scmversion
-            sed -i 's/echo "\$res"/#echo "\$res"/g' scripts/setlocalversion
-            
-            # 3. Force configuration overrides in defconfig
+            # 2. Force configuration overrides in defconfig
             CONFIG_FILE="arch/arm64/configs/${{ env.DEFCONFIG_NAME }}"
             # Set localversion
             if [ -n "${{ github.event.inputs.localVersion }}" ]; then
                echo "CONFIG_LOCALVERSION=\"${{ github.event.inputs.localVersion }}\"" >> "$CONFIG_FILE"
             fi
             
-            # 4. Update build constants for GKI
+            # 3. Update build constants for GKI
             if [ -f "build.config.constants" ]; then
                 sed -i "s/^KERNEL_VERSION=.*/KERNEL_VERSION=$FULL_VERSION/" build.config.constants
             fi
