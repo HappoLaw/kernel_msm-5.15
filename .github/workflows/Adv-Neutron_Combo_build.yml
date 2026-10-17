@@ -46,6 +46,7 @@ on:
           - "KowSU"
           - "SukiSU"
           - "BakaSU"
+          - "FinaSU"
           - "KSU-Next"
       susfsSupport:
         description: "Add SUSFS Implementation (if KSU Enabled)"
@@ -691,6 +692,22 @@ jobs:
           EOF
           
           echo "🎉 BakaSU setup complete!"
+
+      - name: "🔧 Setup FinaSU"
+        if: matrix.variant == 'ksu' && github.event.inputs.ksuVariant == 'FinaSU'
+        working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
+        run: |
+          rm -rf ./KernelSU ./drivers/kernelsu
+
+          echo "📦 Installing BakaSU..."
+          curl -LSs "https://raw.githubusercontent.com/LyraVoid/FinaSU/main/kernel/setup.sh" | bash
+          
+          CONFIG_FILE="arch/arm64/configs/${{ env.DEFCONFIG_NAME }}"
+          cat >> "$CONFIG_FILE" << 'EOF'
+          CONFIG_KSU=y
+          EOF
+          
+          echo "🎉 FinaSU setup complete!"
 
       - name: "🔧 Setup KSU-Next(pershoot) + Multi Manager with SUSFS"
         if: matrix.variant == 'ksu' && github.event.inputs.ksuVariant == 'KSU-Next'
