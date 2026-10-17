@@ -41,7 +41,7 @@ on:
         description: "KSU implementation (if KSU enabled)"
         required: true
         type: choice
-        default: "ReSukiSU"
+        default: "BakaSU"
         options:
           - "KowSU"
           - "SukiSU"
