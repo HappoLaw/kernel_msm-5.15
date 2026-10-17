@@ -181,11 +181,11 @@ jobs:
             
             # 3. Force configuration overrides in defconfig
             CONFIG_FILE="arch/arm64/configs/${{ env.DEFCONFIG_NAME }}"
-            sed -i '/CONFIG_LOCALVERSION/d' "$CONFIG_FILE"
-            sed -i '/CONFIG_LOCALVERSION_AUTO/d' "$CONFIG_FILE"
-            echo "CONFIG_LOCALVERSION=\"$LOCAL_VERSION\"" >> "$CONFIG_FILE"
-            echo "CONFIG_LOCALVERSION_AUTO=n" >> "$CONFIG_FILE"
-
+            # Set localversion
+            if [ -n "${{ github.event.inputs.localVersion }}" ]; then
+               echo "CONFIG_LOCALVERSION=\"${{ github.event.inputs.localVersion }}\"" >> "$CONFIG_FILE"
+            fi
+            
             # 4. Update build constants for GKI
             if [ -f "build.config.constants" ]; then
                 sed -i "s/^KERNEL_VERSION=.*/KERNEL_VERSION=$FULL_VERSION/" build.config.constants
