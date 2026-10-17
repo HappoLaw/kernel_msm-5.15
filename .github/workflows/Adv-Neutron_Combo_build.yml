@@ -79,7 +79,7 @@ on:
           - "750Hz"
           - "1000Hz"
       kProfilesMode:
-        description: "Set Kprofiles Mode (Battery = 1, Balanced = 2, Performance = 3)"
+        description: "Set Kprofiles Mode, only for kaze & zepharo branch (Battery = 1, Balanced = 2, Performance = 3)"
         required: false
         type: choice
         default: "default"
