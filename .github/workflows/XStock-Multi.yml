@@ -584,7 +584,7 @@ jobs:
           ║     • Baseband-guard v1 Support                     ║
           ║     • Vanilla & BakaSU (Multi Manager Support).     ║
           ║     • Integrated with SUSFS (GKI A13-5.15)          ║
-          ║     • Metamodule (Magic-Mount or Mountify) Support  ║
+          ║     • Metamodule & NoMount Support                  ║
           ║                                                     ║
           ║     Please ensure:                                  ║
           ║     • Your device is compatible                     ║
@@ -629,6 +629,7 @@ jobs:
           • Optimization: \`-O2\`
           • BBG: \`Enabled\`
           • Droidspaces: \`Enabled\`
+          • NoMount: \`Enabled\`
 
           📱 *Supported Devices:*
           • Redmi Note 12 4G/NFC
@@ -637,12 +638,9 @@ jobs:
           • Redmi 15/Poco M7 (untested)
 
           📱 *Supported Manager:*
-          • KSU by tiann
-          • MKSU
-          • Rissu-KSU
+          • KSU by tian
           • KowSU
           • BakaSU (Main Root Manager)
-          • SukiSU-Ultra
 
           🕐 *Build Date:* $(date '+%Y-%m-%d %H:%M:%S UTC')
           📦 *Package:* \`${{ env.ZIP_NAME }}\`
@@ -670,6 +668,7 @@ jobs:
           • Optimization: \`-O2\`
           • BBG: \`Enabled\`
           • Droidspaces: \`Enabled\`
+          • NoMount: \`Enabled\`
           
           🕐 *Failed at:* $(date '+%Y-%m-%d %H:%M:%S UTC')
 
