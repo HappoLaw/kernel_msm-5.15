@@ -41,7 +41,7 @@ Get build results sent to Telegram:
 - **@ShirkNeko** – SUSFS integration
 - **@thewildjames** – Wild-KSU
 - **@belowzeroiq** – Guides, Mentoring and Resources
-- **@konekoworldmax** – SUSFS Script, Reflex + Vorpal implementation
+- **@kusonekoworld-max** – SUSFS Script, Reflex + Vorpal implementation
 - **@RapliVx** – KSUN Multi Manager Script
 
 
