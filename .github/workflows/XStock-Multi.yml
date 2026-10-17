@@ -369,14 +369,19 @@ jobs:
           echo "CONFIG_BBG=y" >> arch/arm64/configs/${{ env.DEFCONFIG_NAME }}
           sed -i '/^config LSM$/,/^help$/{ /^[[:space:]]*default/ { /baseband_guard/! s/selinux/selinux,baseband_guard/ } }' security/Kconfig
 
-      - name: "🔧 Setup KSU with SUSFS"
+      - name: "🔧 Add NoMount Support"
+        working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
+        run: |
+          curl -LSs "https://raw.githubusercontent.com/maxsteeel/nomount/refs/heads/dev/kernel/setup.sh" | bash -
+
+      - name: "🔧 Setup KSU"
         if: matrix.kernel.enable_ksu == true
         working-directory: ${{ env.KERNEL_LOC_DIR }}/${{ env.KERNEL_NAME }}
         run: |
           rm -rf ./KernelSU ./drivers/kernelsu
 
           echo "📦 Installing KSU..."
-          curl -LSs "https://raw.githubusercontent.com/Baka-SU/BakaSU/main/kernel/setup.sh" | bash -s main
+          curl -LSs "https://raw.githubusercontent.com/Baka-SU/BakaSU/main/kernel/setup.sh" | bash -s sync-susfs
           
           echo "✔ KSU installed successfully"
           
