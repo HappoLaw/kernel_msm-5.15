@@ -43,6 +43,7 @@ Get build results sent to Telegram:
 - **@belowzeroiq** – Guides, Mentoring and Resources
 - **@kusonekoworld-max** – SUSFS Script, Reflex + Vorpal implementation
 - **@RapliVx** – KSUN Multi Manager Script
+- **@NotPichayut** – Kernel Version Spoof Script
 
 
 ---
