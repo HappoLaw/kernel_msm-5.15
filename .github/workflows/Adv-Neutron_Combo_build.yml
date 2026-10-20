@@ -669,7 +669,7 @@ jobs:
         if: github.event.inputs.applyBBRv3 == 'yes' && matrix.variant == 'ksu'
         working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
         env:
-          BBR3_SHA: 7bc9793d909f52f4a6cd45dd1381b2f200c18a7c
+          BBR3_SHA: "7bc9793d909f52f4a6cd45dd1381b2f200c18a7c"
         run: |
           set -euo pipefail
           curl -fsSL --retry 3 -o /tmp/bbr3.patch \
