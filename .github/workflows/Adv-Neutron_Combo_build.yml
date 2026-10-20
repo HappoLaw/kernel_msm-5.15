@@ -677,10 +677,15 @@ jobs:
             "https://github.com/topnotchfreaks/kernel_msm-5.15/commit/${BBR3_SHA}.patch"
 
           EXCL="--exclude=arch/arm64/configs/unified_defconfig"
+          if git apply --reverse --check $EXCL /tmp/bbr3.patch 2>/dev/null; then
+            echo "ℹ️ BBRv3 + PLB already applied, skipping"
+           exit 0
+          fi
           if ! git apply --check $EXCL /tmp/bbr3.patch; then
             echo "::error::Patch BBRv3 not matched ${KERNEL_BRANCH} (look failed hunks)"
             exit 1
           fi
+          
           git apply -v $EXCL /tmp/bbr3.patch
 
           for f in net/ipv4/tcp_bbr3.c net/ipv4/tcp_plb.c; do
