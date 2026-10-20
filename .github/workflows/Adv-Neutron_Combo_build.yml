@@ -101,14 +101,6 @@ on:
         options:
           - "reflex + vorpal"
           - "none"
-      applyBBRv3 :
-        description: "Backport the WildKernels KABI-safe BBRv3 patch for android13-5.15 (common/bbrv3). Adds BBRv3 as a separate tcp_bbr3.c leaving stock BBRv1 intact, plus TCP PLB (Protective Load Balancing) support."
-        required: false
-        type: choice
-        default: "no"
-        options:
-          - "yes"
-          - "no"
       optimizationLevel:
         description: "Compiler optimization level"
         required: true
@@ -663,55 +655,6 @@ jobs:
               echo "ERROR: failed to inject fair.c gaming patch, missing marker: $MARK" >&2
               exit 1
             fi
-          done
-
-      - name: "⚙️ Apply BBRv3 + PLB"
-        if: github.event.inputs.applyBBRv3 == 'yes' && matrix.variant == 'ksu'
-        working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
-        env:
-          KERNEL_BRANCH: ${{ github.event.inputs.kernelBranch }}
-          BBR3_SHA: 7bc9793d909f52f4a6cd45dd1381b2f200c18a7c
-        run: |
-          set -euo pipefail
-          curl -fsSL --retry 3 -o /tmp/bbr3.patch \
-            "https://github.com/topnotchfreaks/kernel_msm-5.15/commit/${BBR3_SHA}.patch"
-
-          EXCL="--exclude=arch/arm64/configs/${{ env.DEFCONFIG_NAME }}_defconfig"
-          if git apply --reverse --check $EXCL /tmp/bbr3.patch 2>/dev/null; then
-            echo "ℹ️ BBRv3 + PLB already applied, skipping"
-           exit 0
-          fi
-          if ! git apply --check $EXCL /tmp/bbr3.patch; then
-            echo "::error::Patch BBRv3 not matched ${KERNEL_BRANCH} (look failed hunks)"
-            exit 1
-          fi
-          
-          git apply -v $EXCL /tmp/bbr3.patch
-
-          for f in net/ipv4/tcp_bbr3.c net/ipv4/tcp_plb.c; do
-            [ -f "$f" ] || { echo "::error::$f not made"; exit 1; }
-          done
-          echo "✅ BBRv3 + PLB installed"
-
-      - name: "⚙️ Enable BBRv3 + PLB configs"
-        if: github.event.inputs.applyBBRv3 == 'yes' && matrix.variant == 'ksu'
-        working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
-        run: |
-          set -euo pipefail
-          CONFIG_FILE="arch/arm64/configs/${{ env.DEFCONFIG_NAME }}"
-          
-          sed -i '/^CONFIG_TCP_CONG_BBR=/d' "$CONFIG_FILE"
-          sed -i '/^CONFIG_DEFAULT_BBR=/d' "$CONFIG_FILE"
-          
-          SYMS=$(awk '/^config (TCP_CONG_BBR3|TCP_PLB)/{print $2}' net/ipv4/Kconfig || true)
-          if [ -z "$SYMS" ]; then
-            echo "::error::No BBR3/PLB Kconfig symbol found in net/ipv4/Kconfig"
-            exit 1
-          fi
-          for s in $SYMS; do
-            sed -i "/^CONFIG_${s}[= ]/d" "$CONFIG_FILE"
-            echo "CONFIG_${s}=y" >> "$CONFIG_FILE"
-            echo "✅ enabled CONFIG_${s}"
           done
 
       - name: "🚀 Add Droidspaces Support (fix KABI sysvipc)"
