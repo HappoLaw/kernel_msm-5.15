@@ -65,7 +65,7 @@ on:
         description: "Implement NoMount integration via kernel-side(if KSU Enabled)"
         required: false
         type: choice
-        default: "no"
+        default: "yes"
         options:
           - "yes"
           - "no"
@@ -101,6 +101,14 @@ on:
         options:
           - "reflex + vorpal"
           - "none"
+      applyBBRv3 :
+        description: "Backport the WildKernels KABI-safe BBRv3 patch for android13-5.15 (common/bbrv3). Adds BBRv3 as a separate tcp_bbr3.c leaving stock BBRv1 intact, plus TCP PLB (Protective Load Balancing) support."
+        required: false
+        type: choice
+        default: "no"
+        options:
+          - "yes"
+          - "no"
       optimizationLevel:
         description: "Compiler optimization level"
         required: true
@@ -658,7 +666,7 @@ jobs:
           done
 
       - name: "⚙️ Apply BBRv3 + PLB"
-        if: matrix.variant == 'ksu'
+        if: github.event.inputs.applyBBRv3 == 'yes' && matrix.variant == 'ksu'
         working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
         env:
           BBR3_SHA: 7bc9793d909f52f4a6cd45dd1381b2f200c18a7c
