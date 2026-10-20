@@ -149,7 +149,7 @@ jobs:
     env:
       kernelDir: common_${{ github.event.inputs.kernelDevice }}
       kernelName: common
-      DEFCONFIG_NAME: ${{ github.event.inputs.kernelDevice }}_defconfig
+      DEFCONFIG_NAME: ${{Pull requests github.event.inputs.kernelDevice }}_defconfig
       WORK_DIR: ${{ github.workspace }}
 
     steps:
@@ -669,7 +669,8 @@ jobs:
         if: github.event.inputs.applyBBRv3 == 'yes' && matrix.variant == 'ksu'
         working-directory: ./${{ env.kernelDir }}/${{ env.kernelName }}
         env:
-          BBR3_SHA: "7bc9793d909f52f4a6cd45dd1381b2f200c18a7c"
+          KERNEL_BRANCH: ${{ github.event.inputs.kernelBranch }}
+          BBR3_SHA: 7bc9793d909f52f4a6cd45dd1381b2f200c18a7c
         run: |
           set -euo pipefail
           curl -fsSL --retry 3 -o /tmp/bbr3.patch \
@@ -677,7 +678,7 @@ jobs:
 
           EXCL="--exclude=arch/arm64/configs/unified_defconfig"
           if ! git apply --check $EXCL /tmp/bbr3.patch; then
-            echo "::error::Patch BBRv3 not matched ${KERNEL_BRANCH) (look failed hunks)"
+            echo "::error::Patch BBRv3 not matched ${KERNEL_BRANCH} (look failed hunks)"
             exit 1
           fi
           git apply -v $EXCL /tmp/bbr3.patch
