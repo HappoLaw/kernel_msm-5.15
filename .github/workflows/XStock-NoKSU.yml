@@ -425,8 +425,7 @@ jobs:
           ║     • AOSP clang-r614150                            ║
           ║     • Droidspaces Support                           ║
           ║     • Baseband-guard v1 Support                     ║
-          ║     • Vanilla (No-KSU).                                         ║
-          ║     • Integrated with SUSFS (GKI A13-5.15)          ║
+          ║     • Vanilla (No-KSU)                              ║
           ║     • Metamodule & NoMount Support                  ║
           ║                                                     ║
           ║     Please ensure:                                  ║
@@ -452,7 +451,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
         with:
           files: ${{ env.ZIP_NAME }}
-          tag_name: "XStock-MULTI"
+          tag_name: "XStock-NoKSU"
 
       - name: "🎉 Send Telegram success notification"
         run: |
