@@ -466,7 +466,7 @@ jobs:
           • Android: \`13-17\`
           • Base: \`GKI & CLO\`
           • KSU: \`No\`
-          • SUSFS: \`Disables (GKI A13-5.15)\`
+          • SUSFS: \`Disabled (GKI A13-5.15)\`
           • LTO: \`Full\`
           • Optimization: \`-O2\`
           • BBG: \`Enabled\`
