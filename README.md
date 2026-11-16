@@ -50,3 +50,19 @@ Get build results sent to Telegram:
 ---
 
 **Ready to build? Hit that "Run workflow" button! 🎉**
+
+---
+
+## 🔒 120Hz-lock / O3 / quiet build (this fork)
+
+The `Build kernels` workflow now, before compiling:
+
+1. Applies every patch in `patches/`
+   - `0001` – DRM core: internal panels (DSI/eDP/LVDS/DPI) only expose their 120Hz modes and atomic commits at any other rate are rejected. No sysfs/property/param switch. If a panel has no 120Hz mode, nothing is filtered (display can't go blank).
+   - `0002` – lets `-O3` be selected on arm64 (upstream only allows it on ARC).
+2. Sets `-O3`, drops `printk` timestamps/caller, lowers console/message loglevel to 1, disables pstore console/pmsg, `PAGE_OWNER`, and SUSFS logging.
+3. Builds the ReSukiSU + SUSFS (`ksu`) variant by default.
+
+`module/force120vk-v1.1.zip` is a KernelSU module for the userspace side: Vulkan (SkiaVK) systemwide, 120Hz settings, and `logd`/`traced` stopped.
+
+Run **Actions → Build kernels → Run workflow** and pick the branch containing this change.
